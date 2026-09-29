@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <section class="formUtama">
+        <h1 class="judulForm">Form Pendaftaran Ekskul <br> SMK Letris Pamulang</h1>
+        <form class="formPendaftaran">
+            <!-- Input nama lengkap -->
+            <div>
+                <label for="">Nama Lengkap:</label><br>
+                <input class="inputNama" type="text" placeholder="Masukan nama siswa">
+            </div>
+    
+            <!-- Input kelas -->
+            <div>
+                <label for="">Kelas:</label>
+                <div>
+                    <input type="radio" name="kelas" value="X"> X
+                    <input type="radio" name="kelas" value="XI"> XI
+                    <input type="radio" name="kelas" value="XII"> XII
+                </div>
+            </div>
+    
+            <!-- Input jurusan -->
+             <div>
+                <label for="">Jurusan:</label><br>
+                <select class="inputJurusan" name="" id="">
+                    <option value="PPLG">PPLG</option>
+                    <option value="DKV">DKV</option>
+                    <option value="TKJT">TKJT</option>
+                    <option value="AKL">AKL</option>
+                    <option value="BDP">BDP</option>
+                    <option value="MPLB">MPLB</option>
+                </select>
+             </div>
+    
+             <!-- Input ekskul -->
+              <div>
+                <label for="">Pilihan Ekskul</label><br>
+                <select class="inputEkskul" name="" id="">
+                    <option value="animasi">animasi</option>
+                    <option value="paskibra">paskibra</option>
+                    <option value="volley">volley</option>
+                    <option value="baskey">baskey</option>
+                    <option value="futsal">futsal</option>
+                    <option value="letsin">letsin</option>
+                    <option value="pmr">pmr</option>
+                    <option value="dance modern">dance modern</option>
+                </select>
+              </div>
+    
+              <button type="submit" class="addButton">Tambah Data</button>
+        </form>
+    </section>
+
+    <section>
+        <h1>Data Pendaftaran Siswa</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Kelas</th>
+                    <th>Jurusan</th>
+                    <th>Ekskul</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody class="dataPendaftaran"></tbody>
+        </table>
+    </section>
+
+    <script>
+        const formPendaftaran = document.querySelector('.formPendaftaran');
+        const inputNama = document.querySelector('.inputNama');
+        const inputJurusan = document.querySelector('.inputJurusan');
+        const inputEkskul = document.querySelector('.inputEkskul');
+        const tabelData = document.querySelector('.dataPendaftaran');
+
+        const daftarSiswa = [];
+
+        function tampilkanData() {
+            tabelData.innerHTML = '';
+
+            daftarSiswa.forEach((siswa, index) => {
+                tabelData.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${siswa.nama}</td>
+                        <td>${siswa.kelas}</td>
+                        <td>${siswa.jurusan}</td>
+                        <td>${siswa.ekskul}</td>
+                        <td>
+                            <button type="button" class="editButton" onclick="editButton()">Edit</button>
+                            <button type="button" class="" onclick="deleteButton()">Hapus</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        formPendaftaran.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const kelasDipilih = document.querySelector('input[name="kelas"]:checked');
+
+            if (inputNama.value.trim() === '' || !kelasDipilih) {
+                alert('Nama lengkap dan kelas wajib diisi.');
+                return;
+            }
+
+            daftarSiswa.push({
+                nama: inputNama.value.trim(),
+                kelas: kelasDipilih.value,
+                jurusan: inputJurusan.value,
+                ekskul: inputEkskul.value
+            });
+            
+            tampilkanData();
+            formPendaftaran.reset();
+
+        });
+        function deleteButton(){
+            daftarSiswa.forEach((siswa, index) => {
+                daftarSiswa.splice(index, 1);
+                tampilkanData();
+            });
+        }
+
+        function editButton(){
+            const kelasDipilih = document.querySelector('input[name="kelas"][value="' + daftarSiswa[0].kelas + '"]');
+
+            daftarSiswa.forEach((siswa, index) => {
+                daftarSiswa.splice(index, 1);
+                tampilkanData();
+
+                inputNama.value = siswa.nama;
+                kelasDipilih.checked = true;
+            });}
+
+    </script>
+</body>
+</html>
